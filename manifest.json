@@ -1,0 +1,6 @@
+{
+    "name": "Google Snapshot",
+    "description": "View the news according to current Google trends",
+    "version": "1.0",
+    "manifest_version": 3
+}
