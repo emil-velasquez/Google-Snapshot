@@ -22,6 +22,7 @@ var massachusetts = document.getElementById('MA');
 massachusetts.style.fill = "green";
 
 //just for testing
+//https://www.educative.io/edpresso/how-to-generate-a-random-color-in-javascript
 function generateRandomColor() {
   let maxVal = 0xFFFFFF; // 16777215
   let randomNumber = Math.random() * maxVal;
