@@ -10,7 +10,7 @@ const stateAbbreviations = [
 
 //creating a dictionary to pair our state abbreviations with its element
 let abbreviationElementDictionary = new Object();
-for (var abbreviation of stateAbbreviations) {
+for (let abbreviation of stateAbbreviations) {
   console.log(abbreviation);
   abbreviationElementDictionary[abbreviation] = document.getElementById(abbreviation);
   abbreviationElementDictionary[abbreviation].style.fill = generateRandomColor();
