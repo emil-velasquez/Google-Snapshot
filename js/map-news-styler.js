@@ -1,9 +1,9 @@
 //array of colors to color the map with
 const colorsArray = [
-  "#922B21", "#E74C3C", "#AF7AC5", "#6C3483", "#2980B9",
-  "#2980B9", "#2980B9", "#2980B9", "#2980B9", "#2980B9",
-  "#2980B9", "#2980B9", "#2980B9", "#2980B9", "#2980B9",
-  "#31E611", "#31E611", "#C33F3F", "#CB7C7C", "#CB7C7C"
+  "#EE4035", "#F37736", "#FDF498", "#7BC043", "#0392CF",
+  "#76b6c4", "#A200FF", "#FFC300", "#D696BB", "#FF6666",
+  "#525266", "#FFE5A9", "#83ADB5", "#C7BBC9", "#5E3C58",
+  "#FFC5D9", "#FFCB85", "#967259", "#634832", "#074E67"
 ]
 
 const stateAbbs = [
@@ -23,8 +23,8 @@ async function main() {
     abbreviationElementDictionary[abbreviation] = document.getElementById(abbreviation);
   }
 
-  await colorMap(abbreviationElementDictionary)
-
+  let topicToColor = await colorMap(abbreviationElementDictionary)
+  await getArticles(topicToColor);
 }
 
 //colors the map of the united states by topic and returns the dictionary mapping 
@@ -59,6 +59,42 @@ async function colorMap(abbreviationElementDictionary) {
     console.log(topicColorMap[topic]);
     abbreviationElementDictionary[abbreviation].style.fill = topicColorMap[topic];
   }
+
+  return topicColorMap;
+}
+
+//populates the articles section
+async function getArticles(topicToColor) {
+  let sortedTopics = await countSortTopics(topicToColor);
+  console.log(sortedTopics);
+}
+
+//counts the number of states per topic and then sorts the dictionary to return
+async function countSortTopics(topicToColorMap) {
+  //stateTopicMap is exposed for use here
+  let topicCounter = new Object();
+
+  //initialize our topicCounter for every topic we know we have at least 1 reference to
+  for (const [topic, color] of Object.entries(topicToColorMap)) {
+    topicCounter[topic] = 0;
+  }
+
+  //loop through the stateTopicMap and increment the correct value
+  for (const [state, topic] of Object.entries(stateTopicMap)) {
+    topicCounter[topic]++;
+  }
+
+  //sorting the dictionary with https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
+  //creating an array representation of our dictionary
+  var sortedItems = Object.keys(topicCounter).map(function (key) {
+    return [key, topicCounter[key]];
+  });
+
+  sortedItems.sort(function (first, second) {
+    return second[1] - first[1];
+  })
+
+  return sortedItems;
 }
 
 //control flow starts here
@@ -72,7 +108,11 @@ document.addEventListener('mouseover', function (e) {
   if (e.target.tagName == 'path') {
     let content = e.target.dataset.name;
     let stateID = e.target.dataset.id;
-    detailsBox.innerHTML = content + ": " + stateTopicMap["US-" + stateID];
+    try {
+      detailsBox.innerHTML = content + ": " + stateTopicMap["US-" + stateID];
+    } catch {
+      detailsBox.innerHTML = "Loading..."
+    }
     detailsBox.style.opacity = "100%";
   }
   else {

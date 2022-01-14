@@ -2,7 +2,6 @@
 
 path {
     stroke: black;
-
     transition: fill .4s ease;
     transform-origin: center center;
 }
@@ -73,7 +72,6 @@ path:hover {
 
 /* Determines style of the news article section */
 #related-articles {
-    background-color: orange;
     flex: 1;
 }
 
