@@ -75,6 +75,11 @@ path:hover {
     flex: 1;
 }
 
+h1 {
+    font-family: 'Raleway', sans-serif;
+    text-decoration: underline;
+}
+
 /* Holds style for the popup when hovering a us state 
    From https://dev.to/codecustard/creating-an-interactive-map-of-the-us-b5o */
 #details-box {
