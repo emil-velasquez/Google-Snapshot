@@ -27,6 +27,7 @@ async function main() {
 
 }
 
+//colors the map of the united states by topic and returns the dictionary mapping 
 async function colorMap(abbreviationElementDictionary) {
   //grab the mapping from state:topic (note: state is in form US-XX)
   stateTopicMap = await findMostRelevantTopicByState();
@@ -66,6 +67,7 @@ main();
 //these functions from https://dev.to/codecustard/creating-an-interactive-map-of-the-us-b5o
 var detailsBox = document.getElementById("details-box");
 
+//updates the (window detailing state: topic)'s content with the currently hovered state
 document.addEventListener('mouseover', function (e) {
   if (e.target.tagName == 'path') {
     let content = e.target.dataset.name;
@@ -78,6 +80,7 @@ document.addEventListener('mouseover', function (e) {
   }
 });
 
+//moves the window detailing state: topic to the mouse position when over a state
 window.onmousemove = function (e) {
   var x = e.clientX,
     y = e.clientY;
