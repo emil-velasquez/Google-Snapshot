@@ -1,5 +1,8 @@
-const googleTrends = require("google-trends-api");
-const stateAbbreviations = [
+var googleTrends = require("google-trends-api");
+
+//array of state abbreviations to loop through create an array of document elements 
+//that correspond to the
+stateAbbreviations = [
     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
     'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
     'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
@@ -8,10 +11,10 @@ const stateAbbreviations = [
 ];
 
 //dictionary to keep track of alternate predictedTop
-var predictedTopSearches = new Object();
+predictedTopSearches = new Object();
 
 //function declarations
-async function main() {
+findMostRelevantTopicByState = async function () {
     //grab up to 20 of the current trending searchs according to ggogle
     let googleSearches = await getDailyTrendingSearches();
 
@@ -50,11 +53,11 @@ async function main() {
     }
 
     console.log(mostRelevantTopicByState);
-
+    return mostRelevantTopicByState;
 }
 
 //returns a list of the current trending searches for today
-async function getDailyTrendingSearches() {
+getDailyTrendingSearches = async function () {
     let googleSearches = [];
     let dailyTrendsResults = await googleTrends.dailyTrends({ geo: "US" });
     const jsonTrendResults = JSON.parse(dailyTrendsResults);
@@ -67,7 +70,7 @@ async function getDailyTrendingSearches() {
 
 //updates the mostRelevantTopicByState dictionary based on predicted top search term
 //this update will work through pass-by-sharing (nothing will be returned by the function)
-async function updateRelevantTopicByState(start, end, yesterday, predictedTop, googleSearches,
+updateRelevantTopicByState = async function (start, end, yesterday, predictedTop, googleSearches,
     mostRelevantTopicByState, predictedTopSearches) {
     //construct a searchQuery from start to end, starting with predictedTop
     let searchQuery = [predictedTop];
@@ -104,7 +107,8 @@ async function updateRelevantTopicByState(start, end, yesterday, predictedTop, g
 }
 
 //finds the most relevant topic from the searchQuery and updates the dictionaries
-async function checkRegion(region, searchQuery, mostRelevantTopicByState, predictedTopSearches) {
+checkRegion = async function (region, searchQuery, mostRelevantTopicByState,
+    predictedTopSearches) {
     let regionName = region.geoCode;
     //if it is, we run a check through its array of percentages
     let relevancePercentage = region.value;
@@ -140,5 +144,4 @@ async function checkRegion(region, searchQuery, mostRelevantTopicByState, predic
     }
 }
 
-//command flow starts here
-main();
+findMostRelevantTopicByState();

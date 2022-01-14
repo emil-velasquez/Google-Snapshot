@@ -2,16 +2,13 @@
 
 path {
     stroke: black;
-    fill: paleturquoise;
 
     transition: fill .4s ease;
     transform-origin: center center;
 }
 
 path:hover {
-    fill: orange !important;
     cursor: pointer;
-    transform: scale(1.005, 1.005);
 }
 
 /* Style for the container for the logo, search bar, and settings button */
@@ -80,7 +77,8 @@ path:hover {
     flex: 1;
 }
 
-/* Holds style for the popup when hovering a us state */
+/* Holds style for the popup when hovering a us state 
+   From https://dev.to/codecustard/creating-an-interactive-map-of-the-us-b5o */
 #details-box {
     box-shadow: 0px 7px 40px rgba(0, 0, 0, 0.7);
     opacity: 0%;
@@ -89,7 +87,7 @@ path:hover {
     font-size: 12px;
     position: fixed;
     color: white;
-    font-family: "Poppins";
+    font-family: 'Raleway', sans-serif;
     background-color: black;
     width: fit-content;
     transform: translateX(-50%);

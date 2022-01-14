@@ -5,5 +5,8 @@
     "manifest_version": 3,
     "chrome_url_overrides": {
         "newtab": "GoogleSnapshot.html"
-    }
+    },
+    "host_permissions": [
+        "https://trends.google.com/trends/api/*"
+    ]
 }

@@ -1,5 +1,6 @@
 const googleTrends = require('google-trends-api');
-
+console.log(typeof googleTrends);
+console.log(googleTrends);
 var googleSearches = [];
 
 //grabs the latest 20 trending searches according to google
