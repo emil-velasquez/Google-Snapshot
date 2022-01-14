@@ -1,3 +1,5 @@
+var googleTrends = require("google-trends-api");
+
 //array of colors to color the map with
 const colorsArray = [
   "#EE4035", "#F37736", "#FDF498", "#7BC043", "#0392CF",
@@ -56,7 +58,6 @@ async function colorMap(abbreviationElementDictionary) {
     }
 
     //update the state's color
-    console.log(topicColorMap[topic]);
     abbreviationElementDictionary[abbreviation].style.fill = topicColorMap[topic];
   }
 
@@ -66,7 +67,8 @@ async function colorMap(abbreviationElementDictionary) {
 //populates the articles section
 async function getArticles(topicToColor) {
   let sortedTopics = await countSortTopics(topicToColor);
-  console.log(sortedTopics);
+
+  //get the dailytrend data again
 }
 
 //counts the number of states per topic and then sorts the dictionary to return
