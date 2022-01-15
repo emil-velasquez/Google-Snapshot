@@ -55,15 +55,86 @@ path:hover {
     border: none;
 }
 
-/* Style for the flex section containing the options button */
-#settings-container {
+/* Style for the flex section containing the info button */
+#info-container {
     flex: 1;
 }
 
-/* Style for the icon of the options button */
-#settings-gear {
+#info-button {
+    background-color: #181818;
+    color: #FFFFFF;
+    border: none;
+    font-size: 20px;
+    padding-right: 20px;
+}
+
+/* Info popup style from https://www.w3schools.com/howto/howto_js_popup.asp */
+/* Style for the icon of the info button */
+#info-icon {
     font-size: 20px;
     float: right;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+#myPopup {
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+    height: 100px;
+}
+
+/* Style for the popup container */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #404040;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -100px;
+    margin-left: -165px;
+}
+
+.popup .popuptextsocial {
+    visibility: hidden;
+    width: 160px;
+    background-color: #404040;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -100px;
+    margin-left: -165px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 7%;
+    left: 103%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #404040 transparent transparent transparent;
+    transform: scaleY(-1);
+    transform: rotate(-90deg);
+  }
+
+.popup .show {
+    visibility: visible;
+}
+
+#social-link-container {
+    display: flex;
+    justify-content: space-around;
 }
 
 ::placeholder {

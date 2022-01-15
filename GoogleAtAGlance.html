@@ -28,9 +28,26 @@
             </form>
         </div>
 
-        <div id="settings-container">
-            <div id="settings-gear">
-                <i class="fas fa-info-circle"></i>
+        <div id="info-container">
+            <div id="info-icon">
+                <button id="info-button">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+                <div class="popup">
+                    <p class="popuptext" id="myPopup">Hi there! My name is Emil Velasquez and I made this extension. I am a CS student at the University of Texas. Hope you enjoy!</p>
+                    <div class="popuptextsocial" id="social-link-container">
+                        <div id="social-link">
+                            <a id="article-link" href="https://www.linkedin.com/in/emil-velasquez">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                        <div id="social-link">
+                            <a id="article-link" href="https://github.com/emil-velasquez">
+                                <i class="fab fa-github-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -237,6 +254,7 @@
         
     </section>
 
+    <script src="js/popup.js"></script>
     <script src="js/bundledBackend.js"></script>
     <script src="js/bundledMapNewsStyler.js"></script>
 </body>
