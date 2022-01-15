@@ -81,6 +81,12 @@ path:hover {
     flex: 1;
 }
 
+#google-trends-link {
+    margin-left: 16%;
+    color: #FFFFFF;
+    font-family: 'Raleway', sans-serif;
+}
+
 /* Determines style of the news article section */
 #related-articles {
     flex: 1;
