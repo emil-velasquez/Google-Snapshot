@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
+:root {
+    color-scheme: dark;
+}
+
+body {
+    background-color: #181818;
+}
+
 path {
     stroke: black;
     transition: fill .4s ease;
@@ -16,6 +24,7 @@ path:hover {
     display: flex;
     height: 40px;
     align-items: center;
+    color: #FFFFFF;
 }
 
 /* Style for the logo in upper left */
@@ -27,12 +36,13 @@ path:hover {
 
 /* Style for the search box (includes text and button)*/
 #search-box {
-    border-bottom: 2px solid #2f3640;
+    border-bottom: 2px solid #404040;
     padding: 5px;
 }
 
 /* Style for the input text */
 #search-text {
+    background-color: #181818;
     outline: none;
     border: 0;
     font-family: 'Raleway', sans-serif;
@@ -40,7 +50,8 @@ path:hover {
 
 /* Style for the submit button */
 #search-btn {
-    background-color: white;
+    background-color: #181818;
+    color: #FFFFFF;
     border: none;
 }
 
@@ -56,7 +67,7 @@ path:hover {
 }
 
 ::placeholder {
-    color: #000;
+    color: #FFFFFF;
 }
 
 /* Style for the continer for the map and related articles */
@@ -73,11 +84,69 @@ path:hover {
 /* Determines style of the news article section */
 #related-articles {
     flex: 1;
+    overflow-y: auto;
+    max-height: 600px;
 }
 
+/* Style for major article headers */
 h1 {
     font-family: 'Raleway', sans-serif;
-    text-decoration: underline;
+    padding: 5px;
+    margin: 0px;
+    margin-top: 20px;
+    color: #FFFFFF;
+}
+
+/* Style for article titles */
+h2 {
+    font-family: 'Raleway', sans-serif;
+}
+
+/* Style for bullet points */
+#circle-header {
+    padding: 5px;
+}
+
+/* Style for container for both article searches and article cards */
+#article-container {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+/* Style for the article cards box */
+#article-card-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+/* Style for the article cards */
+#article-card {
+    width: 18%;
+    padding: 10px;
+    border-style: solid;
+    border: 2px solid #2f3640;
+    border-radius: 5px;
+    background-color: #404040
+}
+
+/* Style for making the article clickable */
+#article-link {
+    display: block;
+    text-decoration: none;
+}
+
+/* Style to stretch out the image */
+#article-image {
+    width: 100%;
+    height: 100%;
+}
+
+/* Style for the article title text */
+#article-text {
+    color: #FFFFFF;
+    font-family: 'Raleway', sans-serif;
 }
 
 /* Holds style for the popup when hovering a us state 
