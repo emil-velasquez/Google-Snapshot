@@ -4,7 +4,7 @@
     "version": "1.0",
     "manifest_version": 3,
     "chrome_url_overrides": {
-        "newtab": "GoogleSnapshot.html"
+        "newtab": "GoogleAtAGlance.html"
     },
     "host_permissions": [
         "https://trends.google.com/trends/api/*"
