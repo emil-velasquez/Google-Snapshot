@@ -8,5 +8,10 @@
     },
     "host_permissions": [
         "https://trends.google.com/trends/api/*"
-    ]
+    ],
+    "icons": {
+        "16": "assets/glasses-solid.png",
+        "48": "assets/glasses-solid.png",
+        "128": "assets/glasses-solid.png"
+    }
 }
