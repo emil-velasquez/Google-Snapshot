@@ -114,6 +114,22 @@ path:hover {
     margin-left: -165px;
 }
 
+.popup .popuptextLicense {
+    visibility: hidden;
+    width: 160px;
+    background-color: #404040;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: -122px;
+    margin-left: -165px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 12px;
+}
+
 /* Popup arrow */
 .popup .popuptext::after {
     content: "";
