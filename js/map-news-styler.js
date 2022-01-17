@@ -67,7 +67,6 @@ async function getArticles(topicToColor) {
   let sortedTopics = await countSortTopics(topicToColor);
 
   //get the dailytrend data again
-  //TODO: create a method on the backend that keeps from calling dailyTrends twice
   let dailyTrendsResults = getDailyTrendsResults();
   const jsonTrendResults = JSON.parse(dailyTrendsResults);
   const searchResults = jsonTrendResults.default.trendingSearchesDays[0].trendingSearches;
@@ -76,14 +75,8 @@ async function getArticles(topicToColor) {
   for (const [topic, number] of sortedTopics) {
 
     //build a header for it
-    let divHeader = document.createElement("div");
-    divHeader.id = "article-container";
-
     let circleColor = topicToColor[topic];
-    divHeader.innerHTML =
-      "<i id=\"circle-header\" class=\"fas fa-circle\" style=\"color:" + circleColor + "\"></i >" +
-      "<h2>" + topic + "</h2>";
-    document.getElementById("related-articles").appendChild(divHeader);
+    createArticleHeader(topic, circleColor);
 
     //populate its articles
     let articles = document.createElement("div");
@@ -97,36 +90,7 @@ async function getArticles(topicToColor) {
       if (currentTopic.title.query === topic) {
         foundTopic = true;
         let articleArray = currentTopic.articles;
-
-        //for a max of 3 articles or there are no more articles
-        let articleIndex = 0;
-        while (articleIndex < numArticles && articleIndex < articleArray.length) {
-          let currentArticle = articleArray[articleIndex];
-          let currentTitle = currentArticle.title;
-          let currentLink = currentArticle.url;
-          let currentAuthor = currentArticle.source;
-
-          let currentImage;
-          try {
-            currentImage = currentArticle.image.imageUrl;
-          } catch {
-            currentImage = "";
-          }
-
-          let articleCard = document.createElement("div");
-          articleCard.id = "article-card"
-          articleCard.innerHTML =
-            "<a id=\"article-link\" href=\"" + currentLink + "\">" +
-            "<img id=\"article-image\" src=\"" + currentImage + "\">" +
-            "<div id=\"article-text\">" +
-            "<p>" + currentTitle + "</p>" +
-            "<p>" + currentAuthor + "</p>" +
-            "</div>" +
-            "</a>";
-          articles.appendChild(articleCard);
-          articleIndex++;
-        }
-        document.getElementById("related-articles").appendChild(articles);
+        createArticleCards(articleArray, articles, numArticles);
       }
       topicIndex++;
     }
@@ -143,51 +107,58 @@ async function getArticles(topicToColor) {
   for (const addArticle of searchResults) {
     if (!(addArticle.title.query in topicToColor)) {
       //build a header for it
-      let divHeader = document.createElement("div");
-      divHeader.id = "article-container";
-      divHeader.innerHTML =
-        "<i id=\"circle-header\" class=\"fas fa-circle\" style=\"color:white\"></i >" +
-        "<h2>" + addArticle.title.query + "</h2>";
-
-      document.getElementById("related-articles").appendChild(divHeader);
+      createArticleHeader(addArticle.title.query, "white");
 
       //populate its articles
       let articles = document.createElement("div");
       articles.id = "article-card-container";
-
-      foundTopic = true;
       let articleArray = addArticle.articles;
 
-      //for a max of 3 articles or there are no more articles
-      let articleIndex = 0;
-      while (articleIndex < numArticles && articleIndex < articleArray.length) {
-        let currentArticle = articleArray[articleIndex];
-        let currentTitle = currentArticle.title;
-        let currentLink = currentArticle.url;
-        let currentAuthor = currentArticle.source;
-
-        let currentImage;
-        try {
-          currentImage = currentArticle.image.imageUrl;
-        } catch {
-          currentImage = "";
-        }
-
-        let articleCard = document.createElement("div");
-        articleCard.id = "article-card"
-        articleCard.innerHTML =
-          "<a id=\"article-link\" href=\"" + currentLink + "\">" +
-          "<img id=\"article-image\" src=\"" + currentImage + "\">" +
-          "<div id=\"article-text\">" +
-          "<p>" + currentTitle + "</p>" +
-          "<p>" + currentAuthor + "</p>" +
-          "</div>" +
-          "</a>";
-        articles.appendChild(articleCard);
-        articleIndex++;
-      }
-      document.getElementById("related-articles").appendChild(articles);
+      createArticleCards(articleArray, articles, numArticles);
     }
+  }
+}
+
+//given a topic and color, creates a header for the topic
+function createArticleHeader(topic, circleColor) {
+  let divHeader = document.createElement("div");
+  divHeader.id = "article-container";
+  divHeader.innerHTML =
+    "<i id=\"circle-header\" class=\"fas fa-circle\" style=\"color:" + circleColor + "\"></i >" +
+    "<h2>" + topic + "</h2>";
+  document.getElementById("related-articles").appendChild(divHeader);
+}
+
+//given a topics articles, creates up to numArticles cards and attaches it to the div
+function createArticleCards(articleArray, articles, numArticles) {
+  //for a max of 3 articles or there are no more articles
+  let articleIndex = 0;
+  while (articleIndex < numArticles && articleIndex < articleArray.length) {
+    let currentArticle = articleArray[articleIndex];
+    let currentTitle = currentArticle.title;
+    let currentLink = currentArticle.url;
+    let currentAuthor = currentArticle.source;
+
+    let currentImage;
+    try {
+      currentImage = currentArticle.image.imageUrl;
+    } catch {
+      currentImage = "";
+    }
+
+    let articleCard = document.createElement("div");
+    articleCard.id = "article-card"
+    articleCard.innerHTML =
+      "<a id=\"article-link\" href=\"" + currentLink + "\">" +
+      "<img id=\"article-image\" src=\"" + currentImage + "\">" +
+      "<div id=\"article-text\">" +
+      "<p>" + currentTitle + "</p>" +
+      "<p>" + currentAuthor + "</p>" +
+      "</div>" +
+      "</a>";
+    articles.appendChild(articleCard);
+    articleIndex++;
+    document.getElementById("related-articles").appendChild(articles);
   }
 }
 
