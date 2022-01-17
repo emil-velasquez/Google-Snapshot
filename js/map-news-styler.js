@@ -1,11 +1,9 @@
-var googleTrends = require("google-trends-api");
-
 //array of colors to color the map with
 const colorsArray = [
-  "#EE4035", "#F37736", "#FDF498", "#7BC043", "#0392CF",
-  "#76b6c4", "#A200FF", "#FFC300", "#D696BB", "#FF6666",
-  "#525266", "#FFE5A9", "#83ADB5", "#C7BBC9", "#5E3C58",
-  "#FFC5D9", "#FFCB85", "#967259", "#634832", "#074E67"
+  '#E57373', '#BA68C8', '#7986CB', '#4FC3F7', '#4DB6AC',
+  '#AED581', '#FFF176', '#FFB74D', '#A1887F', '#90A4AE',
+  '#F06292', '#9575CD', '#64B5F6', '#4DD0E1', '#81C784',
+  '#DCE775', '#FFD54F', '#FF8A65', '#BDBDBD', '#90A4AE',
 ]
 
 const stateAbbs = [
@@ -33,9 +31,7 @@ async function main() {
 async function colorMap(abbreviationElementDictionary) {
   //grab the mapping from state:topic (note: state is in form US-XX)
   stateTopicMap = await findMostRelevantTopicByState();
-  console.log(stateTopicMap);
   let colorIndex = Math.floor(Math.random() * (colorsArray.length));
-  console.log(colorIndex);
 
   //create a dictionary mapping topics to colors
   topicColorMap = new Object();
@@ -66,9 +62,133 @@ async function colorMap(abbreviationElementDictionary) {
 
 //populates the articles section
 async function getArticles(topicToColor) {
+  const numArticles = 4;
+
   let sortedTopics = await countSortTopics(topicToColor);
 
   //get the dailytrend data again
+  //TODO: create a method on the backend that keeps from calling dailyTrends twice
+  let dailyTrendsResults = getDailyTrendsResults();
+  const jsonTrendResults = JSON.parse(dailyTrendsResults);
+  const searchResults = jsonTrendResults.default.trendingSearchesDays[0].trendingSearches;
+
+  //for every topic that has a state
+  for (const [topic, number] of sortedTopics) {
+
+    //build a header for it
+    let divHeader = document.createElement("div");
+    divHeader.id = "article-container";
+
+    let circleColor = topicToColor[topic];
+    divHeader.innerHTML =
+      "<i id=\"circle-header\" class=\"fas fa-circle\" style=\"color:" + circleColor + "\"></i >" +
+      "<h2>" + topic + "</h2>";
+    document.getElementById("related-articles").appendChild(divHeader);
+
+    //populate its articles
+    let articles = document.createElement("div");
+    articles.id = "article-card-container";
+
+    //find the trendingSearchesObject that correlates with the topic
+    let topicIndex = 0;
+    let foundTopic = false;
+    while (!foundTopic && topicIndex < searchResults.length) {
+      let currentTopic = searchResults[topicIndex];
+      if (currentTopic.title.query === topic) {
+        foundTopic = true;
+        let articleArray = currentTopic.articles;
+
+        //for a max of 3 articles or there are no more articles
+        let articleIndex = 0;
+        while (articleIndex < numArticles && articleIndex < articleArray.length) {
+          let currentArticle = articleArray[articleIndex];
+          let currentTitle = currentArticle.title;
+          let currentLink = currentArticle.url;
+          let currentAuthor = currentArticle.source;
+
+          let currentImage;
+          try {
+            currentImage = currentArticle.image.imageUrl;
+          } catch {
+            currentImage = "";
+          }
+
+          let articleCard = document.createElement("div");
+          articleCard.id = "article-card"
+          articleCard.innerHTML =
+            "<a id=\"article-link\" href=\"" + currentLink + "\">" +
+            "<img id=\"article-image\" src=\"" + currentImage + "\">" +
+            "<div id=\"article-text\">" +
+            "<p>" + currentTitle + "</p>" +
+            "<p>" + currentAuthor + "</p>" +
+            "</div>" +
+            "</a>";
+          articles.appendChild(articleCard);
+          articleIndex++;
+        }
+        document.getElementById("related-articles").appendChild(articles);
+      }
+      topicIndex++;
+    }
+  }
+
+  //now, loop through the rest of trending searchs and build their cards underneath the mapped
+  //topics
+  //create a header
+  let additionalArticleHeader = document.createElement("h1");
+  additionalArticleHeader.textContent = "Other Trending Searches";
+  document.getElementById("related-articles").appendChild(additionalArticleHeader);
+
+  //loop here
+  for (const addArticle of searchResults) {
+    if (!(addArticle.title.query in topicToColor)) {
+      //build a header for it
+      let divHeader = document.createElement("div");
+      divHeader.id = "article-container";
+      divHeader.innerHTML =
+        "<i id=\"circle-header\" class=\"fas fa-circle\" style=\"color:white\"></i >" +
+        "<h2>" + addArticle.title.query + "</h2>";
+
+      document.getElementById("related-articles").appendChild(divHeader);
+
+      //populate its articles
+      let articles = document.createElement("div");
+      articles.id = "article-card-container";
+
+      foundTopic = true;
+      let articleArray = addArticle.articles;
+
+      //for a max of 3 articles or there are no more articles
+      let articleIndex = 0;
+      while (articleIndex < numArticles && articleIndex < articleArray.length) {
+        let currentArticle = articleArray[articleIndex];
+        let currentTitle = currentArticle.title;
+        let currentLink = currentArticle.url;
+        let currentAuthor = currentArticle.source;
+
+        let currentImage;
+        try {
+          currentImage = currentArticle.image.imageUrl;
+        } catch {
+          currentImage = "";
+        }
+
+        let articleCard = document.createElement("div");
+        articleCard.id = "article-card"
+        articleCard.innerHTML =
+          "<a id=\"article-link\" href=\"" + currentLink + "\">" +
+          "<img id=\"article-image\" src=\"" + currentImage + "\">" +
+          "<div id=\"article-text\">" +
+          "<p>" + currentTitle + "</p>" +
+          "<p>" + currentAuthor + "</p>" +
+          "</div>" +
+          "</a>";
+        articles.appendChild(articleCard);
+        articleIndex++;
+      }
+      document.getElementById("related-articles").appendChild(articles);
+    }
+  }
 }
 
 //counts the number of states per topic and then sorts the dictionary to return
@@ -129,4 +249,3 @@ window.onmousemove = function (e) {
   detailsBox.style.top = (y + 20) + 'px';
   detailsBox.style.left = (x) + 'px';
 };
-

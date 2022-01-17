@@ -12,6 +12,7 @@ stateAbbreviations = [
 
 //dictionary to keep track of alternate predictedTop
 predictedTopSearches = new Object();
+var dailyTrendsResults;
 
 //function declarations
 findMostRelevantTopicByState = async function () {
@@ -51,15 +52,13 @@ findMostRelevantTopicByState = async function () {
                 mostRelevantTopicByState, predictedTopSearches);
         }
     }
-
-    console.log(mostRelevantTopicByState);
     return mostRelevantTopicByState;
 }
 
 //returns a list of the current trending searches for today
 getDailyTrendingSearches = async function () {
     let googleSearches = [];
-    let dailyTrendsResults = await googleTrends.dailyTrends({ geo: "US" });
+    dailyTrendsResults = await googleTrends.dailyTrends({ geo: "US" });
     const jsonTrendResults = JSON.parse(dailyTrendsResults);
     const searchResults = jsonTrendResults.default.trendingSearchesDays[0].trendingSearches;
     for (let result of searchResults) {
@@ -83,7 +82,6 @@ updateRelevantTopicByState = async function (start, end, yesterday, predictedTop
     //use this searchQuery to find the interest of the terms by region
     await googleTrends.interestByRegion({ keyword: searchQuery, startTime: yesterday, geo: "US" })
         .then((res) => {
-            console.log(searchQuery);
             const jsonInterestResults = JSON.parse(res);
             const interestRegionArray = jsonInterestResults.default.geoMapData;
             //for each state in our array
@@ -100,7 +98,7 @@ updateRelevantTopicByState = async function (start, end, yesterday, predictedTop
             }
         })
         .catch((err) => {
-            console.log(err);
+            console.log(err); 3
         })
 
 
@@ -144,4 +142,6 @@ checkRegion = async function (region, searchQuery, mostRelevantTopicByState,
     }
 }
 
-findMostRelevantTopicByState();
+getDailyTrendsResults = function () {
+    return dailyTrendsResults;
+}
