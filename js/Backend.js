@@ -31,7 +31,7 @@ findMostRelevantTopicByState = async function () {
 
     const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
     const today = new Date(Date.now());
-    const yesterday = new Date(today - DAY_IN_MILLISECONDS);
+    const yesterday = new Date(today - 3 * DAY_IN_MILLISECONDS);
 
     //dictionary to keep track of alternate predictedTop
     predictedTopSearches = new Object();
