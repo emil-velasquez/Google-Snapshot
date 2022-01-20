@@ -169,6 +169,7 @@ path:hover {
 }
 
 #google-trends-link {
+    margin-top: -13px;
     margin-left: 16%;
     color: #FFFFFF;
     font-family: 'Raleway', sans-serif;
