@@ -99,7 +99,7 @@ updateRelevantTopicByState = async function (start, end, yesterday, predictedTop
             }
         })
         .catch((err) => {
-            console.log(err); 3
+            console.log(err);
         })
 
 
