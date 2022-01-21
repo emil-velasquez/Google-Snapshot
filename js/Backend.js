@@ -30,8 +30,9 @@ findMostRelevantTopicByState = async function () {
     const NUM_QUERIES = googleSearches.length / QUERY_SIZE;
 
     const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
+    const NUM_DAYS_FROM_TODAY = 3;
     const today = new Date(Date.now());
-    const yesterday = new Date(today - 3 * DAY_IN_MILLISECONDS);
+    const yesterday = new Date(today - NUM_DAYS_FROM_TODAY * DAY_IN_MILLISECONDS);
 
     //dictionary to keep track of alternate predictedTop
     predictedTopSearches = new Object();

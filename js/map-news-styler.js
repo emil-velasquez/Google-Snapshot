@@ -30,11 +30,36 @@ async function main() {
 //colors the map of the united states by topic and returns the dictionary mapping 
 async function colorMap(abbreviationElementDictionary) {
   //grab the mapping from state:topic (note: state is in form US-XX)
-  stateTopicMap = await findMostRelevantTopicByState();
+  //TODO: Store data if we need to otherwise grab our stored data
+  const NUM_MIN = 30;
+  const MS_IN_MIN = 60 * 1000;
+
+  let lastRefresh = await readLocalStorage("lastTimeRefreshed");
+  let todayDate = new Date(Date.now());
+
+  console.log(todayDate - lastRefresh);
+
+  if (todayDate - lastRefresh >= NUM_MIN * MS_IN_MIN) {
+    //we want to refresh our data
+    chrome.storage.local.set({ "lastTimeRefreshed": todayDate.valueOf() });
+    let currentStateTopicMap = await findMostRelevantTopicByState();
+    chrome.storage.local.set({ "storedStateTopicMap": currentStateTopicMap });
+    let currentDailyTrendsResults = getDailyTrendsResults();
+    chrome.storage.local.set({ "storedDailyTrends": currentDailyTrendsResults });
+
+    stateTopicMap = currentStateTopicMap;
+    console.log("Updated data");
+  } else {
+    //we want stateTopicMap to be equal to the data we had stored
+    stateTopicMap = await readLocalStorage("storedStateTopicMap");
+    console.log(stateTopicMap);
+    console.log("Grabbed data");
+  }
+
   let colorIndex = Math.floor(Math.random() * (colorsArray.length));
 
   //create a dictionary mapping topics to colors
-  topicColorMap = new Object();
+  let topicColorMap = new Object();
 
   //for every state
   for (const [state, topic] of Object.entries(stateTopicMap)) {
@@ -62,12 +87,13 @@ async function colorMap(abbreviationElementDictionary) {
 
 //populates the articles section
 async function getArticles(topicToColor) {
+  console.log('here');
   const numArticles = 4;
 
   let sortedTopics = await countSortTopics(topicToColor);
 
   //get the dailytrend data again
-  let dailyTrendsResults = getDailyTrendsResults();
+  let dailyTrendsResults = await readLocalStorage("storedDailyTrends");
   const jsonTrendResults = JSON.parse(dailyTrendsResults);
   const searchResults = jsonTrendResults.default.trendingSearchesDays[0].trendingSearches;
 
@@ -117,6 +143,15 @@ async function getArticles(topicToColor) {
       createArticleCards(articleArray, articles, numArticles);
     }
   }
+}
+
+//returns the data stored on the local storage at the key
+async function readLocalStorage(key) {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([key], function (result) {
+      resolve(result[key]);
+    })
+  })
 }
 
 //given a topic and color, creates a header for the topic
