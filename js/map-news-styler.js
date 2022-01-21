@@ -37,8 +37,6 @@ async function colorMap(abbreviationElementDictionary) {
   let lastRefresh = await readLocalStorage("lastTimeRefreshed");
   let todayDate = new Date(Date.now());
 
-  console.log(todayDate - lastRefresh);
-
   if (todayDate - lastRefresh >= NUM_MIN * MS_IN_MIN) {
     //we want to refresh our data
     chrome.storage.local.set({ "lastTimeRefreshed": todayDate.valueOf() });
@@ -48,12 +46,9 @@ async function colorMap(abbreviationElementDictionary) {
     chrome.storage.local.set({ "storedDailyTrends": currentDailyTrendsResults });
 
     stateTopicMap = currentStateTopicMap;
-    console.log("Updated data");
   } else {
     //we want stateTopicMap to be equal to the data we had stored
     stateTopicMap = await readLocalStorage("storedStateTopicMap");
-    console.log(stateTopicMap);
-    console.log("Grabbed data");
   }
 
   let colorIndex = Math.floor(Math.random() * (colorsArray.length));
@@ -87,7 +82,6 @@ async function colorMap(abbreviationElementDictionary) {
 
 //populates the articles section
 async function getArticles(topicToColor) {
-  console.log('here');
   const numArticles = 4;
 
   let sortedTopics = await countSortTopics(topicToColor);
