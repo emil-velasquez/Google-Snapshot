@@ -49,7 +49,7 @@ findMostRelevantTopicByState = async function () {
         }
         for (const [topic, number] of Object.entries(predictedTopSearches)) {
             //generate list of all alternate predictedTops that need to be searched through
-            await updateRelevantTopicByState(start, end, yesterday, topic, googleSearches,
+            await updateRelevantTopicByState(start, end, topic, googleSearches,
                 mostRelevantTopicByState, predictedTopSearches);
         }
     }
@@ -70,7 +70,7 @@ getDailyTrendingSearches = async function () {
 
 //updates the mostRelevantTopicByState dictionary based on predicted top search term
 //this update will work through pass-by-sharing (nothing will be returned by the function)
-updateRelevantTopicByState = async function (start, end, yesterday, predictedTop, googleSearches,
+updateRelevantTopicByState = async function (start, end, predictedTop, googleSearches,
     mostRelevantTopicByState, predictedTopSearches) {
     //construct a searchQuery from start to end, starting with predictedTop
     let searchQuery = [predictedTop];
@@ -80,16 +80,12 @@ updateRelevantTopicByState = async function (start, end, yesterday, predictedTop
         }
     }
 
-    //use this searchQuery to find the interest of the terms by region
-    await googleTrends.interestByRegion({ keyword: searchQuery, startTime: yesterday, geo: "US" })
+    await interestByRegionDaily(searchQuery)
         .then((res) => {
             const jsonInterestResults = JSON.parse(res);
             const interestRegionArray = jsonInterestResults.default.geoMapData;
-            //for each state in our array
             for (let region of interestRegionArray) {
                 let regionName = region.geoCode;
-                //check if it is a state we care about (aka 1 of the 50 states)
-                //also check if that state is part of this search
                 if (regionName in mostRelevantTopicByState) {
                     if (mostRelevantTopicByState[regionName] === predictedTop) {
                         checkRegion(region, searchQuery, mostRelevantTopicByState,
@@ -98,11 +94,6 @@ updateRelevantTopicByState = async function (start, end, yesterday, predictedTop
                 }
             }
         })
-        .catch((err) => {
-            console.log(err);
-        })
-
-
 }
 
 //finds the most relevant topic from the searchQuery and updates the dictionaries
@@ -145,4 +136,90 @@ checkRegion = async function (region, searchQuery, mostRelevantTopicByState,
 
 getDailyTrendsResults = function () {
     return dailyTrendsResults;
+}
+
+function httpGet(theUrl) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", theUrl, false); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+async function interestByRegionDaily(search) {
+    widgetURLGet = getWidgetURL(search);
+
+    let widgetData = httpGet(widgetURLGet);
+    widgetData = widgetData.slice(5);
+    const jsonWidgetData = JSON.parse(widgetData);
+    const jsonWidgetInfoContainer = jsonWidgetData.widgets[1];
+    const timeBounds = jsonWidgetInfoContainer.request.comparisonItem[0].time;
+    const token = jsonWidgetInfoContainer.token;
+
+    let comparedGeoURL = getComparedGeoURL(timeBounds, token, search);
+    console.log(comparedGeoURL);
+    let comparedGeoData = httpGet(comparedGeoURL);
+    comparedGeoData = comparedGeoData.slice(6);
+
+    return comparedGeoData;
+}
+
+function getWidgetURL(searchQuery) {
+    let widgetURL = "https://trends.google.com/trends/api/explore?hl=en-US&tx=360&req=";
+    let urlObject = new Object();
+    urlObject.comparisonItem = [];
+    for (let query of searchQuery) {
+        let queryObject = new Object();
+        queryObject.keyword = query;
+        queryObject.geo = "US";
+        queryObject.time = "now 1-d";
+        urlObject.comparisonItem.push(queryObject);
+    }
+    urlObject.category = 0;
+    urlObject.property = "";
+    widgetURL = widgetURL + JSON.stringify(urlObject);
+    widgetURL = widgetURL + "&tz=360";
+    return widgetURL;
+}
+
+function getComparedGeoURL(timeBounds, curToken, searchQuery) {
+    let callURL = "https://trends.google.com/trends/api/widgetdata/comparedgeo?hl=en-US&tz=360&req=";
+    let urlObject = new Object();
+
+    let geoObject = new Object();
+    geoObject.country = "US";
+    urlObject.geo = geoObject;
+
+    urlObject.comparisonItem = [];
+    for (let query of searchQuery) {
+        let queryObject = new Object();
+        queryObject.time = timeBounds;
+
+        let keywordRestrictionObject = new Object();
+        keywordRestrictionObject.keyword = [];
+        let searchObject = new Object();
+        searchObject.type = "BROAD";
+        console.log(query);
+        searchObject.value = query;
+        keywordRestrictionObject.keyword.push(searchObject);
+
+        queryObject.complexKeywordsRestriction = keywordRestrictionObject;
+
+        urlObject.comparisonItem.push(queryObject);
+    }
+
+    urlObject.resolution = "REGION";
+    urlObject.locale = "en-US";
+
+    let requestOptionObject = new Object();
+    requestOptionObject.property = "";
+    requestOptionObject.backend = "CM";
+    requestOptionObject.category = 0;
+    urlObject.requestOptions = requestOptionObject;
+
+    urlObject.dataMode = "PERCENTAGES";
+
+    callURL = callURL + JSON.stringify(urlObject);
+    callURL = callURL + "&token=" + curToken;
+
+    return callURL;
 }
