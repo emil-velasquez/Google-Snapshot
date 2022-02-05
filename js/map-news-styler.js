@@ -39,12 +39,11 @@ async function colorMap(abbreviationElementDictionary) {
 
   if (todayDate - lastRefresh >= NUM_MIN * MS_IN_MIN) {
     //we want to refresh our data
-    chrome.storage.local.set({ "lastTimeRefreshed": todayDate.valueOf() });
     let currentStateTopicMap = await findMostRelevantTopicByState();
     chrome.storage.local.set({ "storedStateTopicMap": currentStateTopicMap });
     let currentDailyTrendsResults = getDailyTrendsResults();
     chrome.storage.local.set({ "storedDailyTrends": currentDailyTrendsResults });
-
+    chrome.storage.local.set({ "lastTimeRefreshed": todayDate.valueOf() });
     stateTopicMap = currentStateTopicMap;
   } else {
     //we want stateTopicMap to be equal to the data we had stored
