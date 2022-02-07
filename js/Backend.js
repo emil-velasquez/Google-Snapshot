@@ -138,17 +138,16 @@ getDailyTrendsResults = function () {
     return dailyTrendsResults;
 }
 
-function httpGet(theUrl) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", theUrl, false); // false for synchronous request
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
+async function httpGet(theUrl) {
+    let response = await fetch(theUrl);
+    let data = response.text();
+    return data;
 }
 
 async function interestByRegionDaily(search) {
     widgetURLGet = getWidgetURL(search);
+    let widgetData = await httpGet(widgetURLGet);
 
-    let widgetData = httpGet(widgetURLGet);
     widgetData = widgetData.slice(5);
     const jsonWidgetData = JSON.parse(widgetData);
     const jsonWidgetInfoContainer = jsonWidgetData.widgets[1];
@@ -156,8 +155,7 @@ async function interestByRegionDaily(search) {
     const token = jsonWidgetInfoContainer.token;
 
     let comparedGeoURL = getComparedGeoURL(timeBounds, token, search);
-    console.log(comparedGeoURL);
-    let comparedGeoData = httpGet(comparedGeoURL);
+    let comparedGeoData = await httpGet(comparedGeoURL);
     comparedGeoData = comparedGeoData.slice(6);
 
     return comparedGeoData;
@@ -198,7 +196,6 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
         keywordRestrictionObject.keyword = [];
         let searchObject = new Object();
         searchObject.type = "BROAD";
-        console.log(query);
         searchObject.value = query;
         keywordRestrictionObject.keyword.push(searchObject);
 
