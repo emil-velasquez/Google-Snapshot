@@ -29,11 +29,6 @@ findMostRelevantTopicByState = async function () {
     const QUERY_SIZE = 4;
     const NUM_QUERIES = googleSearches.length / QUERY_SIZE;
 
-    const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
-    const NUM_DAYS_FROM_TODAY = 3;
-    const today = new Date(Date.now());
-    const yesterday = new Date(today - NUM_DAYS_FROM_TODAY * DAY_IN_MILLISECONDS);
-
     //dictionary to keep track of alternate predictedTop
     predictedTopSearches = new Object();
     predictedTopSearches[googleSearches[0]] = 50;
@@ -167,7 +162,7 @@ function getWidgetURL(searchQuery) {
     urlObject.comparisonItem = [];
     for (let query of searchQuery) {
         let queryObject = new Object();
-        queryObject.keyword = query;
+        queryObject.keyword = query.replace("\'", "");
         queryObject.geo = "US";
         queryObject.time = "now 1-d";
         urlObject.comparisonItem.push(queryObject);
@@ -196,7 +191,7 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
         keywordRestrictionObject.keyword = [];
         let searchObject = new Object();
         searchObject.type = "BROAD";
-        searchObject.value = query;
+        searchObject.value = query.replace("\'", "");
         keywordRestrictionObject.keyword.push(searchObject);
 
         queryObject.complexKeywordsRestriction = keywordRestrictionObject;
