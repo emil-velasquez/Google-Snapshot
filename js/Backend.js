@@ -191,7 +191,7 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
         keywordRestrictionObject.keyword = [];
         let searchObject = new Object();
         searchObject.type = "BROAD";
-        searchObject.value = query.replace("\'", "");
+        searchObject.value = query.replace("\'", "").replace(":", "");
         keywordRestrictionObject.keyword.push(searchObject);
 
         queryObject.complexKeywordsRestriction = keywordRestrictionObject;
