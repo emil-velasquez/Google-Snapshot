@@ -201,6 +201,7 @@ path:hover {
     max-height: 600px;
     align-self: center;
     font-size: 12px;
+    min-width: 600px;
 }
 
 /* Style for major article headers */
