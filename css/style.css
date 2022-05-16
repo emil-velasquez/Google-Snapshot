@@ -142,7 +142,7 @@ path:hover {
     border-color: #404040 transparent transparent transparent;
     transform: scaleY(-1);
     transform: rotate(-90deg);
-  }
+}
 
 .popup .show {
     visibility: visible;
@@ -157,14 +157,28 @@ path:hover {
     color: #FFFFFF;
 }
 
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
 /* Style for the continer for the map and related articles */
 .news-section-container {
+    justify-content: left;
     display: flex;
+    overflow-y: hidden;
+    overflow-x: auto;
+    flex-direction: row;
+    align-items: center;
+    height: 80vh;
 }
 
 /* Determines base style for the us map div */
 #us-map {
-    margin-left: -9%;
+    margin-left: -110px;
+    margin-bottom: 0px;
+    overflow-x: visible;
     flex: 1;
 }
 
@@ -179,7 +193,10 @@ path:hover {
 #related-articles {
     flex: 1;
     overflow-y: auto;
+    overflow-x: auto;
     max-height: 600px;
+    align-self: center;
+    font-size: 12px;
 }
 
 /* Style for major article headers */
@@ -211,14 +228,14 @@ h2 {
 /* Style for the article cards box */
 #article-card-container {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
+    justify-content: left;
 }
 
 /* Style for the article cards */
 #article-card {
-    width: 18%;
+    width: 110px;
     padding: 10px;
+    margin-right: 10px;
     border-style: solid;
     border: 2px solid #2f3640;
     border-radius: 5px;
@@ -234,14 +251,34 @@ h2 {
 
 /* Style to stretch out the image */
 #article-image {
-    width: 100%;
-    height: 100%;
+    width: 110px;
+    height: 110px;
 }
 
 /* Style for the article title text */
 #article-text {
     color: #FFFFFF;
     font-family: 'Raleway', sans-serif;
+}
+
+@media screen and (max-width: 1000px) {
+    .news-section-container {
+        flex-direction: column;
+        height: 150vh;
+    }
+
+    #us-map {
+        margin-bottom: 20px;
+
+    }
+
+    #related-articles {
+        align-self: center
+    }
+
+    #article-card-container {
+        justify-content: center;
+    }
 }
 
 /* Holds style for the popup when hovering a us state 

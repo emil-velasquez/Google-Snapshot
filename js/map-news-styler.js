@@ -245,6 +245,6 @@ document.addEventListener('mouseover', function (e) {
 window.onmousemove = function (e) {
   var x = e.clientX,
     y = e.clientY;
-  detailsBox.style.top = (y + 20) + 'px';
+  detailsBox.style.top = (y - 70) + 'px';
   detailsBox.style.left = (x) + 'px';
 };
