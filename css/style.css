@@ -265,7 +265,7 @@ h2 {
     font-family: 'Raleway', sans-serif;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1480px) {
     .news-section-container {
         align-items: center;
         flex-direction: column;
@@ -303,7 +303,7 @@ h2 {
     }
 }
 
-@media screen and (min-width: 1101px) and (max-width: 1300px) {
+@media screen and (min-width: 1101px) and (max-width: 1480px) {
     #map-container {
         overflow-x: hidden;
     }
