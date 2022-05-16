@@ -261,7 +261,7 @@ h2 {
     font-family: 'Raleway', sans-serif;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1300px) {
     .news-section-container {
         flex-direction: column;
         height: 150vh;
