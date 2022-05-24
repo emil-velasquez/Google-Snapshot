@@ -208,7 +208,7 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
     requestOptionObject.category = 0;
     urlObject.requestOptions = requestOptionObject;
 
-    urlObject.dataMode = "PERCENTAGES";
+    urlObject.userConfig = { "userType": "USER_TYPE_UNSPECIFIED" }
 
     callURL = callURL + JSON.stringify(urlObject);
     callURL = callURL + "&token=" + curToken;
