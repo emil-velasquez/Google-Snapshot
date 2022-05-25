@@ -1,7 +1,7 @@
 {
     "name": "Google at a Glance",
     "description": "View trending searches in the United States mapped by interest",
-    "version": "1.0",
+    "version": "1.0.2",
     "manifest_version": 3,
     "chrome_url_overrides": {
         "newtab": "GoogleAtAGlance.html"
