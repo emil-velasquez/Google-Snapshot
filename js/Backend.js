@@ -18,7 +18,6 @@ var dailyTrendsResults;
 findMostRelevantTopicByState = async function () {
     //grab up to 20 of the current trending searchs according to ggogle
     let googleSearches = await getDailyTrendingSearches();
-
     //dictionary mapping each state to its most popular search
     //initialized assuming that the overall most trending search is the most popular search
     let mostRelevantTopicByState = new Object();
@@ -146,7 +145,7 @@ async function interestByRegionDaily(search) {
     widgetData = widgetData.slice(5);
     const jsonWidgetData = JSON.parse(widgetData);
     const jsonWidgetInfoContainer = jsonWidgetData.widgets[1];
-    const timeBounds = jsonWidgetInfoContainer.request.comparisonItem[0].time;
+    const timeBounds = jsonWidgetInfoContainer.request.comparisonItem[0].time.replace(" ", "+");
     const token = jsonWidgetInfoContainer.token;
 
     let comparedGeoURL = getComparedGeoURL(timeBounds, token, search);
@@ -157,25 +156,25 @@ async function interestByRegionDaily(search) {
 }
 
 function getWidgetURL(searchQuery) {
-    let widgetURL = "https://trends.google.com/trends/api/explore?hl=en-US&tx=360&req=";
+    let widgetURL = "https://trends.google.com/trends/api/explore?hl=en-US&tz=300&req=";
     let urlObject = new Object();
     urlObject.comparisonItem = [];
     for (let query of searchQuery) {
         let queryObject = new Object();
         queryObject.keyword = query.replace("\'", "");
         queryObject.geo = "US";
-        queryObject.time = "now 1-d";
+        queryObject.time = "now+1-d";
         urlObject.comparisonItem.push(queryObject);
     }
     urlObject.category = 0;
     urlObject.property = "";
     widgetURL = widgetURL + JSON.stringify(urlObject);
-    widgetURL = widgetURL + "&tz=360";
+    widgetURL = widgetURL + "&tz=300";
     return widgetURL;
 }
 
 function getComparedGeoURL(timeBounds, curToken, searchQuery) {
-    let callURL = "https://trends.google.com/trends/api/widgetdata/comparedgeo?hl=en-US&tz=360&req=";
+    let callURL = "https://trends.google.com/trends/api/widgetdata/comparedgeo?hl=en-US&tz=300&req=";
     let urlObject = new Object();
 
     let geoObject = new Object();
@@ -207,11 +206,10 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
     requestOptionObject.backend = "CM";
     requestOptionObject.category = 0;
     urlObject.requestOptions = requestOptionObject;
-
-    urlObject.userConfig = { "userType": "USER_TYPE_UNSPECIFIED" }
     if (searchQuery.length > 1) {
         urlObject.dataMode = "PERCENTAGES"
     }
+    urlObject.userConfig = { "userType": "USER_TYPE_SCRAPER" }
 
     callURL = callURL + JSON.stringify(urlObject);
     callURL = callURL + "&token=" + curToken;
