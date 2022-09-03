@@ -161,7 +161,7 @@ function getWidgetURL(searchQuery) {
     urlObject.comparisonItem = [];
     for (let query of searchQuery) {
         let queryObject = new Object();
-        queryObject.keyword = query.replace("\'", "");
+        queryObject.keyword = query.replace("\'", "").replace("&", "%26");
         queryObject.geo = "US";
         queryObject.time = "now+1-d";
         urlObject.comparisonItem.push(queryObject);
@@ -190,7 +190,7 @@ function getComparedGeoURL(timeBounds, curToken, searchQuery) {
         keywordRestrictionObject.keyword = [];
         let searchObject = new Object();
         searchObject.type = "BROAD";
-        searchObject.value = query.replace("\'", "").replace(":", " ").replace(")", " ");
+        searchObject.value = query.replace("\'", "").replace(":", " ").replace(")", " ").replace("&", "%26");
         keywordRestrictionObject.keyword.push(searchObject);
 
         queryObject.complexKeywordsRestriction = keywordRestrictionObject;
