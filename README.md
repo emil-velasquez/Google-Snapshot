@@ -13,3 +13,5 @@ Features:
 - Provides related articles for those trending searches
 
 (Not affiliated with Google)
+
+Built with: ![HTML Logo](https://github.com/emil-velasquez/Google-at-a-Glance/blob/master/html5.svg) ![CSS Logo](https://github.com/emil-velasquez/Google-at-a-Glance/blob/master/css3.svg) ![Javascript Logo](https://github.com/emil-velasquez/Google-at-a-Glance/blob/master/javascript.svg)
