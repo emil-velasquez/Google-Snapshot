@@ -5,6 +5,7 @@
 Download at https://chrome.google.com/webstore/detail/google-at-a-glance/fcpdimnjklllafobmcjdihcaccoikejg
 
 View trending searches in the United States mapped by interest
+
 Transform your Google home page into a map visualization of the current trending searches in the United States!
 
 Features:
