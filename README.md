@@ -13,3 +13,5 @@ Features:
 - Provides related articles for those trending searches
 
 (Not affiliated with Google)
+
+Built with: HTML, CSS, and Javascript
